@@ -1,0 +1,441 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks,pdfusetitle]{hyperref}
+\newcommand{\DOI}[1]{\mbox{\href{https://doi.org/#1}{\nolinkurl{#1}}}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\spec}{spec}
+\newcommand{\proved}{\textbf{PROVED}}
+\newcommand{\certified}{\textbf{CERTIFIED}}
+\newcommand{\openstatus}{\textbf{OPEN}}
+\newcommand*{\LINEARFIVEDOI}{10.5281/zenodo.24374043}
+\newcommand*{\LINEARFIVESUPPDOI}{10.5281/zenodo.24374045}
+\newcommand*{\LINEARFIVEREPO}{https://github.com/SuperMatics-Inc/imaginary-time-pairing-barriers}
+\newcommand{\ifstaged}[3]{\ifx#1\empty #3\else #2\fi}
+\title{Imaginary-time estimates and method barriers beyond the two-thirds adiabatic bound}
+\author{Davis Rens\\SuperMatics Inc.\\\href{https://orcid.org/0000-0001-5839-5197}{ORCID 0000-0001-5839-5197}}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For the spinful square-lattice Holstein and bond Su--Schrieffer--Heeger (SSH) models with independent harmonic phonons of energy $\Omega=\hbar\sqrt{K/m}>0$ and relaxation energy $U=F^2/K>0$, a static expansion gives an $\Omega^{1/2}$ upper bound on algebraic electronic pair correlations, and retaining small bounded phonon histories improves the threshold to order $\Omega^{2/3}[\log(E/\Omega)]^{1/3}$. Whether a linear ceiling $k_BT_{\rm pair}\le C\Omega$ (or $\Omega$ times a fixed power of $\log(1/\Omega)$) holds at fixed bare hopping $t>0$, coupling $U>0$, and regular density remains \openstatus. This paper collects the exact imaginary-time machinery available at the linear scale together with eight proved method barriers, each paired with a certified counterexample. On the positive side, we prove imaginary-time reflection positivity in both grand-canonical and fixed-number ensembles, zero-source partition-function sandwiches for the spin-balanced sector $N_\uparrow=N_\downarrow$ and even total particle number, interacting kinetic-gauge Gaussian domination with a continuous natural-amplitude slab excursion budget of order $\Omega$ per oscillator, unit chronological moment and auxiliary-CAR determinant bounds for averaged fermions, a gap-free frozen two-electron Combes--Thomas resolvent estimate of range $J/\tau$, and an $O(\Omega)$ atomic connected pair-susceptibility expansion. On the barrier side, we construct certified obstructions showing why naive routes from these lemmas do not close a linear ceiling: unrestricted zero-mean SSH monodromies with zero determinant and unbounded contractions, palindromic natural-amplitude Wick amplification, failure of instantaneous Fermi-equilibrium tracking, failure of ordinary spatial reflection positivity in nonempty nonfull balanced Holstein sectors, failure of Wick's rule under history averaging, a negative nonzero-Matsubara SSH slow-field Hessian below an explicit $\Omega^{2/3}$ scale, exponential lower bounds on unconditional integrated-field moments, and unbounded charged two-time insertions inside good natural-amplitude slabs. An exact atomic Franck--Condon sideband calculation clarifies why zero-temperature vacuum narrowing alone does not establish a fixed-hopping lattice bound.
+\end{abstract}
+
+\section{Models, conventions, and the open linear target}
+
+Let $\Lambda$ be a finite periodic nearest-neighbor square lattice with $V=|\Lambda|$ sites and graph distance $d$. Two spin species $\sigma\in\{\uparrow,\downarrow\}$ act through annihilators $c_{x\sigma}$. Write $n_x=\sum_\sigma c_{x\sigma}^\dagger c_{x\sigma}$ and $N=\sum_x n_x$, and for each undirected nearest-neighbor bond $e=\{x,y\}$ define
+\[
+ B_e=\sum_\sigma (c_{x\sigma}^\dagger c_{y\sigma}+c_{y\sigma}^\dagger c_{x\sigma}).
+\]
+In the energy-coordinate representation $b=FX$, with oscillator relaxation energy $U=F^2/K>0$, phonon frequency $\Omega=\hbar\sqrt{K/m}>0$, temperature $\tau=k_BT>0$, inverse temperature $\beta=1/\tau$, and kinetic coefficient $D=U\Omega^2$, the pure finite-volume Hamiltonian is
+\begin{equation}\label{eq:model}
+ H=-t\sum_e B_e+\sum_j\left(\frac{D}{2}p_j^2+\frac{b_j^2}{2U}+b_j B_j\right),
+ \qquad p_j=-i\partial_{b_j},
+\end{equation}
+with bare hopping $t>0$ and no direct electron-electron interaction or magnetic field. For Holstein, $j=x$ and $B_j=n_x$ (or $n_x-1$ in centered convention, which is an oscillator translation and chemical-potential shift). For bond SSH, $j=e$ and $B_j=B_e$, so the effective bond hopping is $-t+b_e$. All energies ($\tau,U,\Omega,t$) carry the same units; imaginary time carries inverse energy units; each field coordinate $b_j$ carries energy units. Because the scalar oscillator potential is quadratic and the electronic coupling is linear and finite-dimensional, $H$ is self-adjoint, bounded below, and trace-class for $\exp(-\beta H)$. Grand-canonical traces include $-\mu N$ in the electronic Hamiltonian $H_{\rm el}(b)$ for real $\mu$; fixed-number traces restrict to invariant particle sectors. In heat-trace and Lehmann formulas below, $Z=\Tr e^{-\beta H}$ denotes the unnormalized partition function. In the atomic electronic-weight formulas only, the common free-oscillator trace is divided out explicitly.
+
+Building on the static $\Omega^{1/2}$ suppression theorem~\cite{slow} and cylinder bounds~\cite{cylinders}, Ref.~\cite{linear4} proves exponential clustering of equal-time local charge-two correlations above an explicit threshold of order $\Omega^{2/3}[\log(E/\Omega)]^{1/3}$ ($E=t$ for Holstein, $E=t+U$ for SSH). That paper also establishes the sharp small-cutoff barrier: any positive rare-restriction method requiring $\sup_u |b(u)-b_0|\le\kappa\tau$ uniformly over atomic references encounters $O(1)$ bad-history probability unless $\tau\ge c\,\Omega^{2/3}$. We refer to~\cite{linear4} for that small-cutoff proposition and the failure of reflection positivity after subtracting the static Matsubara zero mode $b_0=\beta^{-1}\int_0^\beta b(u)\,du$; neither result is reproduced here.
+
+The central target remaining after~\cite{linear4} is explicit:
+\begin{quote}
+\openstatus. \textit{For the pure spinful square-lattice Holstein and bond-SSH models at fixed $t,U>0$ and fixed regular density $n\in(0,2)$, determine whether $k_BT_{\rm pair}\le C\Omega$ (or $C\Omega\log^p(1/\Omega)$ for fixed $p\ge 0$).}
+\end{quote}
+No physical counterexample violating a linear ceiling is exhibited here, and no physical transition-temperature lower bound or empirical material claim is made. Throughout, \proved{} marks analytical theorems and propositions proved in the text, \certified{} marks finite exact-rational or multi-precision interval verifications executed in the accompanying offline replay scripts (\nolinkurl{replay/linear5/replay.py}, $24$ mutant guards, and \nolinkurl{replay/stage3/replay.py}, $12$ mutant guards), and \openstatus{} marks targets that remain unresolved.
+
+\section{Positive imaginary-time and spectral estimates}
+
+We begin with the exact positive statements that survive at the linear scale $\beta\Omega=O(1)$ without assuming small temporal amplitudes.
+
+\subsection{Imaginary-time reflection positivity}
+
+\begin{proposition}[Imaginary-time reflection positivity, \proved]\label{prop:rp}
+For both models~\eqref{eq:model} at every $\beta>0$ and $\Omega>0$, the Euclidean path functional is reflection positive across the time slices $0$ and $\beta/2$, both grand canonically and in every fixed total-number sector. Noncommuting SSH bond couplings are permitted.
+\end{proposition}
+
+\begin{proof}
+Write $s=\beta/2$ and let $K_s(x,y)>0$ be the symmetric harmonic-oscillator heat kernel on $\mathbb R^M$ at time $s$, where $M$ is the number of oscillators. Let $\nu_{xy}$ be the normalized harmonic bridge measure from $x$ to $y$ on $[0,s]$. For a half-period path $w:[0,s]\to\mathbb R^M$, define the chronological matrix evolution and conditional kernel
+\[
+ M_w=\mathcal T\exp\!\left(-\int_0^s H_{\rm el}(w(u))\,du\right),\qquad
+ Q_f(x,y)=\int \nu_{xy}(dw)\,f(w)M_w,
+\]
+working on either the full Fock space or a fixed-$N$ invariant subspace. Since $H_{\rm el}(b)$ is Hermitian for every real vector $b$, time-reversing the second half-path $v(u)=b(\beta-u)$ reverses the order of the Hermitian infinitesimal factors $\exp(-du\,H_{\rm el})$, turning its evolution into $M_v^\dagger$. Conditioning a periodic path on $(x,y)=(b(0),b(\beta/2))$ splits the two halves into independent bridges $\nu_{xy}\otimes\nu_{xy}$ weighted by $K_s(x,y)^2$. Defining $(\Theta f)(b)=\overline{f(b(\beta-\cdot))}$ for bounded half-path functionals $f,g$, time-slicing convergence under the quadratic harmonic domination $\|M_w\|\le \exp[\int_0^s (C+\sum_e C_e |w_e(u)|)\,du]$ gives
+\begin{equation}\label{eq:rp-inner}
+ Z\,\langle(\Theta f)g\rangle = \int dx\,dy\,K_s(x,y)^2\Tr\!\bigl[Q_f(x,y)^\dagger Q_g(x,y)\bigr],
+\end{equation}
+The expectation is normalized by this same heat trace $Z$. The right-hand side of~\eqref{eq:rp-inner} is a Hilbert-space inner product, so
+\begin{equation}\label{eq:rp-cs}
+ \langle(\Theta f)f\rangle \ge 0,\qquad |\langle(\Theta f)g\rangle|^2 \le \langle(\Theta f)f\rangle\langle(\Theta g)g\rangle.
+\end{equation}
+In the two-spin grand-canonical model, the electronic determinant is a square and defines a positive path measure. Taking $f=1_E$ and $g=1$ gives the rare-event inequality
+\begin{equation}\label{eq:rp-rare}
+ \langle 1_E\rangle^2 \le \langle 1_E(\Theta 1_E)\rangle.
+\end{equation}
+In the number-conserving one-particle evolution $m_w$ (excluding scalar fugacity), the mirrored half-period matrix is $m_w^\dagger m_w>0$, so $\det(I+q m_w^\dagger m_w)>0$ for every $q>0$.
+\end{proof}
+
+\begin{remark}
+Proposition~\ref{prop:rp} concerns the full path $b$, not the projected path $v=b-b_0$ (whose reflected covariance is strictly negative~\cite{linear4}). Furthermore,~\eqref{eq:rp-rare} carries no explicit factor of $\Omega$: obtaining an $\Omega$-dependent bound on the reflected interacting weight $\langle 1_E(\Theta 1_E)\rangle$ at $\beta\Omega=O(1)$ is a separate task. In \texttt{replay/linear5/replay.py}, the $2\times 2$ finite-matrix Hilbert--Schmidt Gram determinant identity underlying~\eqref{eq:rp-cs} is \certified{} ($2\cdot 6 - 2^2=8$, versus failure when the adjoint is omitted).
+\end{remark}
+
+\subsection{Balanced-sector and even-\texorpdfstring{$N$}{N} partition-function sandwiches}
+
+\begin{proposition}[Balanced and $\mathrm{SU}(2)$ zero-source sandwiches, \proved]\label{prop:sandwich}
+On a finite lattice with $V$ sites, let $Z$ be the grand-canonical partition function, $Z_{\rm bal}$ its restriction to the spin-balanced subspace $N_\uparrow=N_\downarrow$, and $Z_N$ the canonical partition function at even total particle number $N$. For both models~\eqref{eq:model},
+\begin{equation}\label{eq:sandwiches}
+ Z_{\rm bal} \le Z \le (V+1)Z_{\rm bal},\qquad
+ Z_{N/2,N/2} \le Z_N \le (N+1)Z_{N/2,N/2}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For the first sandwich, fix a real phonon history with one-spin period matrix $Y$ and fugacity $z=e^{\beta\mu}>0$, and write $D(z)=\det(I+zY)=\sum_{n=0}^V a_n z^n$ with real coefficients $a_n$ ($a_0=1$). Opposite-spin imaginary chemical-potential twists give
+\begin{equation}\label{eq:wbal}
+ W_{\rm bal}=\frac{1}{2\pi}\int_0^{2\pi}|D(ze^{i\theta})|^2\,d\theta=\sum_{n=0}^V a_n^2 z^{2n}\ge 1.
+\end{equation}
+By spin conservation, angular averaging projects the two-spin trace onto $N_\uparrow=N_\downarrow$, so integrating $W_{\rm bal}$ against the free phonon measure yields $Z_{\rm bal}$. Pointwise Cauchy--Schwarz in $\mathbb R^{V+1}$ gives $D(z)^2\le (V+1)\sum_{n=0}^V a_n^2 z^{2n}$, proving $Z\le (V+1)Z_{\rm bal}$. The lower bound $Z_{\rm bal}\le Z$ follows from positivity of the quantum trace in every conserved spin sector $(N_\uparrow,N_\downarrow)$, even though $W_{\rm bal}$ need not dominate $D(z)^2$ history-by-history.
+
+For the second sandwich, the pure Hamiltonian~\eqref{eq:model} commutes with global $\mathrm{SU}(2)$ spin rotations. In the even-$N$ electron space, decompose the representation into integer-spin irreducibles $V_S$ ($0\le S\le N/2$) tensored with multiplicity spaces $\mathcal M_S$. On each $V_S\otimes\mathcal M_S$, the Hamiltonian acts as $I_{V_S}\otimes H_S$, where $H_S$ acts on $\mathcal M_S$ tensored with the oscillator Hilbert space. Because every integer-spin irreducible $V_S$ has a unique $S_z=0$ vector and dimension $2S+1\le N+1$, letting $w_S=\Tr\exp(-\beta H_S)>0$ gives
+\[
+ Z_{N/2,N/2}=\sum_S w_S,\qquad Z_N=\sum_S (2S+1)w_S,
+\]
+proving $Z_{N/2,N/2}\le Z_N\le (N+1)Z_{N/2,N/2}$.
+\end{proof}
+
+Both sandwiches imply equality of zero-source thermodynamic pressures. Neither inequality transfers arbitrary signed canonical path restrictions or pair-source curvatures automatically, and odd-$N$ sectors are not covered by the second bound. In \texttt{replay/linear5/replay.py}, the three-site balanced weight ($W_{\rm bal}=4$ at $z=1$), the upper bound $D(z)^2\le 4W_{\rm bal}$ for $z\in\{0,1/2,1,2\}$, and the $N=4$ $\mathrm{SU}(2)$ multiplicity bound ($\le 5$, $1+6+15=22\le 5\cdot 6$) are \certified{}.
+
+\subsection{Interacting kinetic-gauge Gaussian domination and slab budget}
+
+\begin{theorem}[Interacting increment MGF and natural-amplitude slab budget, \proved]\label{thm:slab}
+Consider either model~\eqref{eq:model} on full Fock space or any invariant fixed-number sector. Partition $[0,\beta]$ into $m$ intervals of lengths $\delta_j>0$ ($\sum_j\delta_j=\beta$) with vertices $t_j$. Given vertex vectors $\lambda_j\in\mathbb R^M$ with $\sum_j\lambda_j=0$ coordinatewise, choose constant arc vectors $q_j$ such that $\lambda_j=q_{j-1}-q_j$ and set $\bar q=\beta^{-1}\sum_j \delta_j q_j$. Then
+\begin{equation}\label{eq:gauge-mgf}
+ \bigl|Z\,\mathbb E\exp\!\bigl(\sum_j \lambda_j\cdot b(t_j)\bigr)\bigr|
+ \le Z\exp\!\left(\frac{D}{2}\sum_j \delta_j |q_j-\bar q|^2\right).
+\end{equation}
+In the grand-canonical ensemble and in every spin-balanced sector $N_\uparrow=N_\downarrow=k$, the normalized Euclidean functional is a positive probability measure, and~\eqref{eq:gauge-mgf} yields:
+\begin{enumerate}
+\item[(a)] For every single coordinate $e$, $s\in(0,\beta)$, and $\eta\in\mathbb R$,
+\begin{equation}\label{eq:inc-mgf}
+ \mathbb E\exp[\eta(b_e(s)-b_e(0))] \le \exp\!\left(\frac{U\Omega^2\eta^2 s(\beta-s)}{2\beta}\right).
+\end{equation}
+\item[(b)] For $v_e(t)=b_e(t)-\beta^{-1}\int_0^\beta b_e(u)\,du$,
+\begin{equation}\label{eq:proj-tail}
+ \mathbb E\exp(\eta v_e(t))\le \exp(D\eta^2\beta/24),\qquad
+ P(|v_e(t)|\ge r)\le 2\exp\!\bigl(-6r^2/(D\beta)\bigr).
+\end{equation}
+\item[(c)] Let $I_j$ be time slabs of lengths $L_j$ on coordinates $e_j$ such that intervals sharing a coordinate are disjoint, and set $F_j=\{\sup_{t\in I_j}|b_{e_j}(t)-b_{e_j}(\mathrm{left}(I_j))|>R_j\}$. If $x_j=R_j^2/(32DL_j)\ge 16$ for every $j$, then
+\begin{equation}\label{eq:slab-budget}
+ P\!\left(\bigcap_j F_j\right)\le \prod_j \bigl[4\exp(-x_j)\bigr].
+\end{equation}
+In particular, on $m$ permitted slabs of width $L=\ell/\Omega$ and natural amplitude $R=\rho\sqrt{U\Omega}$ with $\rho^2\ge 512\ell$,
+\begin{equation}\label{eq:natural-slab}
+ P\!\left(\bigcap_{j=1}^m F_j\right)\le \exp\!\left[-m\left(\frac{\rho^2}{32\ell}-\log 4\right)\right],
+\end{equation}
+uniformly in volume, hopping, and static parameters.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We first establish the non-Hermitian Schatten estimate: for any real vector $q\in\mathbb R^M$, letting $A_q=D\,q\cdot p$, every $t>0$ and $1\le p<\infty$ obey
+\begin{equation}\label{eq:schatten}
+ \|\exp[-t(H+iA_q)]\|_{S_p} \le \bigl[\Tr\exp(-ptH)\bigr]^{1/p}.
+\end{equation}
+In finite dimension, Lie product approximation gives
+\[
+ \exp[-t(H+iA_q)]=\lim_{n\to\infty}\bigl[\exp(-tH/n)\exp(-itA_q/n)\bigr]^n;
+\]
+because $\exp(-itA_q/n)$ is unitary, $n$-fold Schatten H\"older with exponents $np$ gives $[\Tr\exp(-ptH)]^{1/p}$. For the unbounded Hamiltonian~\eqref{eq:model}, harmonic confinement gives $H\ge (D/2)p^2+|b|^2/(4U)-C$, so $H$ has compact resolvent, and $A_q$ is infinitesimally form-bounded relative to $H+C$, making $H+iA_q$ a closed sectorial operator~\cite{kato}. Let $P_L$ project onto the first $L$ eigenvectors of $H$. Their span is dense in the form domain of $H$; the Galerkin forms inherit common coercivity and sectorial bounds, so the form-resolvent equations converge strongly, and the common resolvent contour with dominated resolvent bounds gives strong semigroup convergence. Lower semicontinuity of the $S_p$ norm under strong convergence and monotonicity of the truncated heat trace prove~\eqref{eq:schatten}.
+
+Next, on a smooth core, $\exp(q\cdot b)H\exp(-q\cdot b)=H+iDq\cdot p-D|q|^2/2$ because $V(b)$ commutes with scalar multiplication. The semigroup of $H+iDq\cdot p$ has constant coordinate drift $-Dq$, leaving the conditional coordinate bridge unchanged while shifting the Gaussian endpoint density by $\exp[q\cdot(x-y)-D|q|^2t/2]$. Truncating the linear-growth potential and dominating by the harmonic trap yields the heat-kernel identity
+\[
+ \exp[q\cdot(x-y)]K_H(t;x,y)=\exp(D|q|^2t/2)K_{H+iDq\cdot p}(t;x,y).
+\]
+Replacing $q_j$ by $q_j-\bar q$ preserves every vertex coefficient $\lambda_j=q_{j-1}-q_j$. Multiplying the cyclic kernels factors out $\exp[(D/2)\sum_j\delta_j|q_j-\bar q|^2]$ and leaves $\Tr\prod_j \exp[-\delta_j(H+iA_{q_j-\bar q})]$. Applying trace H\"older with $p_j=\beta/\delta_j$ and~\eqref{eq:schatten} yields~\eqref{eq:gauge-mgf}.
+
+Taking $q=\eta$ on $(0,s)$ and $0$ on $(s,\beta)$ gives $\bar q=\eta s/\beta$ and~\eqref{eq:inc-mgf}. Approximating $v_e(t)$ by Riemann sums leads to the limiting gauge $q(s)=\eta(s/\beta-1/2)$ of $L^2$ norm squared $\eta^2\beta/12$, proving~\eqref{eq:proj-tail} by Fatou's lemma and Markov's inequality. For disjoint-arc increments $|\Delta_j|\ge r_j$ of lengths $L_j$, orthogonal gauge supports ensure that subtracting $\bar q$ only reduces the squared norm; summing over the $2^m$ sign choices with $\eta_j=r_j/(DL_j)$ gives
+\begin{equation}\label{eq:disjoint-inc}
+ P(\forall j:\;|\Delta_j|\ge r_j)\le \prod_j \bigl[2\exp(-r_j^2/(2DL_j))\bigr].
+\end{equation}
+On each slab $I_j$, dyadic chaining with level-$n$ weights $a_n=(1/4)(3/4)^n$ ($\sum_{n\ge 0}a_n=1$) forces an excursion $>R_j$ to exceed $a_n R_j$ at some level-$n$ dyadic increment of length $\le L_j/2^n$ (at most $2^n$ choices per level). Because intervals sharing a coordinate are disjoint,~\eqref{eq:disjoint-inc} gives
+\[
+ P\!\left(\bigcap_j F_j\right)\le \prod_j \left(2\sum_{n=0}^\infty 2^n \exp\!\left[-x_j (9/8)^n\right]\right).
+\]
+For $x_j\ge 16$, consecutive terms in the sum have ratio at most $2e^{-x_j/8}\le 2e^{-2}<1/2$ (since $e^2>19/3>4$), bounding each bracket by $4e^{-x_j}$ and proving~\eqref{eq:slab-budget}--\eqref{eq:natural-slab}. In balanced canonical sectors, the two-spin weight $a_k^2\ge 0$ makes the normalized path weight positive, so (a)--(c) hold identically there.
+\end{proof}
+
+Notice two deliberate boundaries of Theorem~\ref{thm:slab}. First,~\eqref{eq:gauge-mgf} is not conditioned on a prescribed static zero mode $b_0$, which is a nonlocal-in-time constraint. Second,~\eqref{eq:natural-slab} pays an $\Omega$-independent cost per slab of width $\ell/\Omega$, so a full thermal-circle tiling has cost proportional to $\beta\Omega/\ell$ with no invented extra factor of $\beta\Omega$ per slab; in contrast, inserting the small cutoff $R=\kappa\tau$ gives $x=\kappa^2\tau^2/(32U\Omega\ell)\to 0$ at fixed $\beta\Omega$. In \texttt{replay/linear5/replay.py}, the kinetic gauge sign, optimal circle centering ($19/4\le 5$), projected gauge variance $1/12$, increment factor $3/8$, dyadic budget sum $1$, tail ratio $9/8$, $e^2>19/3>4$, natural-amplitude threshold $512/32=16$, and a $60$-digit $2\times 2$ non-Hermitian Schatten $S_2$ spot check ($<5/4$) are \certified{}.
+
+\subsection{Chronological moments, auxiliary CAR determinants, and two-electron transport}
+
+\begin{proposition}[Ordered moments and auxiliary-CAR determinant bound, \proved]\label{prop:car-det}
+Let $A_j$ be bounded electronic operators and $\delta_j\ge 0$ satisfy $\sum_{j=1}^m\delta_j=\beta$. In the full grand-canonical trace of~\eqref{eq:model},
+\begin{equation}\label{eq:ordered-moment}
+ \bigl|\Tr\bigl(e^{-\delta_1 H}A_1\cdots e^{-\delta_m H}A_m\bigr)\bigr|\le Z\prod_{j=1}^m \|A_j\|.
+\end{equation}
+Furthermore, let $G_{ab}(s)=Z^{-1}\Tr[e^{-\beta H}c_a(s)c_b^\dagger]$ ($0<s<\beta$) be the averaged antiperiodic two-point kernel with equal-time convention $G(0^+)=\langle cc^\dagger\rangle$ and $G(0^-)=-\langle c^\dagger c\rangle$. Then for every $k\ge 1$, all orbital indices $a_i,b_j$, and all times $t_i,s_j\in[0,\beta)$,
+\begin{equation}\label{eq:det-one}
+ \bigl|\det\bigl[G_{a_i b_j}(t_i-s_j)\bigr]_{i,j=1}^k\bigr|\le 1,
+\end{equation}
+and~\eqref{eq:det-one} remains valid under multiplication by any positive-semidefinite diagonal-one vertex interpolation matrix $[s_{ij}]_{i,j=1}^k$.
+\end{proposition}
+
+\begin{proof}
+Assigning exponents $p_j=\beta/\delta_j$ to nonzero intervals and operator norms $\|A_j\|$ to the insertions yields~\eqref{eq:ordered-moment} directly by Schatten H\"older (merging zero intervals with adjacent insertions).
+
+For~\eqref{eq:det-one}, expand $G_{ab}(s)$ in a full eigenbasis $\{|m\rangle\}$ of $H$. For transitions with $c$ removing one electron, write $\omega_{mn}=E_n-E_m$ and define the positive matrix-valued atomic measure
+\[
+ d\mu_{ab}(\omega)=\frac{1}{Z}\sum_{m,n}(e^{-\beta E_m}+e^{-\beta E_n})
+ \langle m|c_a|n\rangle\overline{\langle m|c_b|n\rangle}\,\delta_{\omega_{mn}}(d\omega).
+\]
+By the canonical anticommutation relations (CAR), $\int d\mu_{ab}=\langle c_a c_b^\dagger\rangle+\langle c_b^\dagger c_a\rangle=\delta_{ab}$, and for $0<s<\beta$,
+\[
+ G_{ab}(s)=\int \frac{e^{-s\omega}}{1+e^{-\beta\omega}}\,d\mu_{ab}(\omega).
+\]
+Build an auxiliary one-particle Hilbert space with one basis vector per transition $(m,n)$, diagonal energy $\omega_{mn}$, and field vectors whose components are the square roots of the measure weights times $\langle m|c_a|n\rangle$. On any finite subset of transitions, the orbital map is a contraction, so the truncated auxiliary field operators have norm at most $1$. In that finite-dimensional auxiliary free-fermion system, Wick's theorem equates the truncated covariance determinant to an ordered free-fermion moment, bounded by $1$ via~\eqref{eq:ordered-moment}. Because the thermal factor lies in $[0,1]$ for all $\omega\in\mathbb R$ and $0\le s\le\beta$ and $\mu$ has unit matrix mass, the finite truncations converge to $G_{ab}(t_i-s_j)$ (including the one-sided equal-time limits), yielding~\eqref{eq:det-one}. For a PSD diagonal-one matrix $s_{ij}=\langle\xi_i,\xi_j\rangle$ with unit vectors $\xi_i$, tensoring the auxiliary field vector at vertex $i$ with $\xi_i$ preserves norm $\le 1$ and multiplies the covariance by $s_{ij}$.
+\end{proof}
+
+Proposition~\ref{prop:car-det} does not assert a single time-independent Gram factorization for the discontinuous chronological kernel, nor does it bound the physical connected four-point vertices (which differ from~\eqref{eq:det-one}, as shown in Proposition~\ref{prop:wick-avg}). Notice also that~\eqref{eq:ordered-moment} is not asserted for charge-changing insertions inside a fixed-$N$ heat trace. In \texttt{replay/stage3/replay.py}, the one-orbital CAR Lehmann normalization identity, negative-energy thermal factor $<1$, and a $2\times 2$ chronological minor $1/(e+e^{-1})$ are \certified{}.
+
+\begin{proposition}[Gap-free frozen two-electron Combes--Thomas-type estimate, \proved]\label{prop:ct}
+Let $h$ be any static, self-adjoint nearest-neighbor one-electron Hamiltonian on a finite square with arbitrary real diagonal and hopping modulus at most $J>0$, and let $h_2=(h\otimes I+I\otimes h)|_{\wedge^2\mathcal H_1}$ be its antisymmetric two-electron lift. Let $d(p,q)$ be the graph distance on two-electron configurations (row degree at most $8$). For $z\in\mathbb C$ with $|\operatorname{Im}z|=\tau>0$, set $a=\log(1+\tau/(16J))$. Then
+\begin{equation}\label{eq:ct}
+ \bigl|\bigl[(h_2-z)^{-1}\bigr]_{p,q}\bigr| \le \frac{2}{\tau}\exp[-a\,d(p,q)].
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Weight configurations by $W_p=\exp[a\,d(p,q)]$. Because each single-electron nearest-neighbor hop changes $d(\cdot,q)$ by at most $1$ and each two-electron configuration has at most $8$ neighbors of hopping modulus $\le J$, every row and column $\ell^1$ norm of $W h_2 W^{-1}-h_2$ is at most $8J(e^a-1)=\tau/2$ (diagonal entries cancel). By Schur's test, $\|W h_2 W^{-1}-h_2\|\le\tau/2$. Since $\|(h_2-z)^{-1}\|\le 1/\tau$ by self-adjointness, the Neumann series for $W(h_2-z)^{-1}W^{-1}=(h_2-z+W h_2 W^{-1}-h_2)^{-1}$ converges with operator norm at most $2/\tau$, giving~\eqref{eq:ct}.
+\end{proof}
+
+Equation~\eqref{eq:ct} is a Combes--Thomas-type adaptation~\cite{combesthomas} requiring no electronic gap and covering arbitrarily low frozen energies, with decay range $O(J/\tau)$ at small $\tau/J$. However, connecting a static resolvent at $|\operatorname{Im}z|=\tau$ to the interacting bosonic zero-frequency pair susceptibility requires an insertion representation across annealed histories. In \texttt{replay/stage3/replay.py}, the degree-$8$ row/column perturbation identity $8J(e^a-1)=\tau/2$ is \certified{}.
+
+\subsection{Exact atomic \texorpdfstring{$O(\Omega)$}{O(Omega)} connected pair susceptibility}
+
+\begin{proposition}[Atomic connected source response, \proved]\label{prop:atomic-susc}
+On a single isolated spinful Holstein site ($t=0$) with $H_0=\Omega a^\dagger a+g(a+a^\dagger)(n-1)$, $g^2=U\Omega/2$, and pair source $-h(c_\uparrow^\dagger c_\downarrow^\dagger+c_\downarrow c_\uparrow)$, define $p(h)=\beta^{-1}\log Z(h)$ and $\chi=p''(0)$. At fixed $U>0$ and $a=\beta\Omega>0$, as $\Omega\downarrow 0$,
+\begin{equation}\label{eq:atomic-susc}
+ \chi_{\rm qu}-\chi_{\rm st}=\frac{\Omega}{2U^2}\left[\coth\!\left(\frac{a}{2}\right)-\frac{2}{a}\right]+o(\Omega)>0,
+\end{equation}
+where $\chi_{\rm st}$ is the annealed static ($\Omega=0$) susceptibility.
+\end{proposition}
+
+\begin{proof}
+The empty and doubly occupied states have $(n-1)^2=1$ and displaced energy $-U/2$, giving the reduced electronic partition function $Z_{\rm el}(0)=2(e^{\beta U/2}+1)$ after division by the common free-oscillator trace. Pair flips reverse the oscillator displacement by $d=2g/\Omega$ ($d^2=2U/\Omega$), so normal ordering in the oscillator trace gives
+\[
+ \chi_{\rm qu}=\frac{e^{\beta U/2}}{e^{\beta U/2}+1}\int_0^\beta \exp\!\left(-\frac{2U}{\Omega}R_a(s)\right)ds,\qquad
+ \chi_{\rm st}=\frac{e^{\beta U/2}}{e^{\beta U/2}+1}\int_0^\beta \exp\!\bigl(-2Us(1-s/\beta)\bigr)\,ds,
+\]
+where $R_a(s)=[\cosh(a/2)-\cosh(\Omega(s-\beta/2))]/\sinh(a/2)$. Because $R_a(s)/(\Omega s)\ge 2\tanh(a/4)/a>0$ on $[0,\beta/2]$, truncating at $L(\Omega)=C\log(1/\Omega)$ gives $o(\Omega)$ tail error. On $[0,L(\Omega)]$, Taylor expanding $(2U/\Omega)R_a(s)=2Us-U\Omega\coth(a/2)s^2+O_a(U\Omega^2s^3)$ against $e^{-2Us}$ and using $2\int_0^\infty s^2 e^{-2Us}\,ds=1/(2U^3)$ yields~\eqref{eq:atomic-susc}. Positivity follows from $\coth x>1/x$ ($x>0$).
+\end{proof}
+
+Proposition~\ref{prop:atomic-susc} supplies an exact $O(\Omega)$ soluble benchmark for connected source interpolation, contrasting with the bulk additive free-energy sandwich. It is a $t=0$ atomic check, not a square-lattice susceptibility bound. In \texttt{replay/linear5/replay.py}, the endpoint moment factor $2\cdot(2/8)=1/2$ is \certified{}.
+
+\section{Certified barriers to linear-scale closure}
+
+We now exhibit eight exact obstructions showing why natural extensions of Section~2 fail to close a linear ceiling. Each barrier is paired with a certified finite example.
+
+\subsection{Unrestricted continuous SSH monodromies}
+
+\begin{proposition}[Unrestricted history barrier, \proved, \certified]\label{prop:unrestricted}
+Among continuous, periodic, spin-independent, zero-mean bond-SSH histories on a three-site path (embedded in a square torus with $b_0=t$ elsewhere), there exist histories whose one-spin monodromy $Y$ satisfies $\det(I+Y)=0$, whose normalized grand-canonical one-particle contraction $N_q=qY(I+qY)^{-1}$ ($q=e^{\beta\mu}$) diverges as $q\to 1$ and grows exponentially under zero-mean pulse conjugation at any fixed $q\ne 1$, whose twist-averaged conditional pair transfer is unbounded, and whose two-spin canonical fugacity polynomial has strictly negative coefficients.
+\end{proposition}
+
+\begin{proof}
+Divide $[0,\beta]$ into four quarter-intervals with left endpoints $l_j$ and $C^1$ zero-boundary pulses $f_j(u)=(8/\beta)\sin^2(4\pi(u-l_j)/\beta)$ ($\int f_j=1$). With $\eta_1=\log 3$ and $\eta_2=\log(4+\sqrt{15})$, assign chronological Hamiltonians $+\eta_2 f_1 K_{23}$, $+\eta_1 f_2 K_{12}$, $-\eta_2 f_3 K_{23}$, $-\eta_1 f_4 K_{12}$, where $K_{ij}=|i\rangle\langle j|+|j\rangle\langle i|$. Setting $A=\exp(\eta_1 K_{12})$ and $B=\exp(\eta_2 K_{23})$ gives
+\begin{equation}\label{eq:monodromy-Y}
+ Y=ABA^{-1}B^{-1}=
+ \begin{pmatrix}
+  -13/3 & 20/3 & -4\sqrt{15}/3\\
+  -20/3 & 37/3 & -8\sqrt{15}/3\\
+  -4\sqrt{15}/3 & 8\sqrt{15}/3 & -9
+ \end{pmatrix}.
+\end{equation}
+Exact multiplication in $\mathbb Q(\sqrt{15})$ gives $Y^2=I$, $\Tr Y=-1$, $\det Y=1$, and $\spec(Y)=\{1,-1,-1\}$, so $\det(I+qY)=(1+q)(1-q)^2$. At $\mu=0$ ($q=1$), the two-spin weight $\det(I+Y)^2$ vanishes (even with $(1+q)^{V-3}$ spectators on a larger torus). For $q\ne 1$,
+\[
+ N_q=\frac{q}{1+q}P_+ + \frac{q}{q-1}P_-,\qquad P_\pm=\frac{I\pm Y}{2}.
+\]
+On the rank-$2$ eigenspace $P_-$, the contraction norm is $|q/(q-1)|$ ($101$ at $q=101/100$). Conjugating by two opposite zero-mean pulses $T_\gamma=\exp(\gamma K_{12})$ replaces $N_q$ by $T_\gamma N_q T_\gamma^{-1}$; because the $+$-to$-$ element of $Y$ in $K_{12}$ eigenbasis is $-15$, the conjugated contraction contains an entry of magnitude $15|q/(q^2-1)|e^{2\gamma}$, unbounded at any fixed $q\ne 1$. Under opposite-spin twist averaging~\eqref{eq:wbal} at $z=1$, $W_{\rm bal}=4$, yet $D(q)N_q=q(1-q)(Y-qI)$ gives conditional normalized onsite pair transfer $|Y_{12}|^2/2=200/9$ (and unbounded under $T_\gamma$). Finally, the three-site two-spin fugacity polynomial $(1-q-q^2+q^3)^2=1-2q-q^2+4q^3-q^4-2q^5+q^6$ has negative coefficients at $N=1,5$.
+\end{proof}
+
+This refutes replacing small-amplitude references in~\cite{linear4} by unrestricted histories while retaining pointwise normalized Wick estimates, even after twist averaging. In \texttt{replay/linear5/replay.py}, all matrix identities in $\mathbb Q(\sqrt{15})$, $\det(I+qY)$, $N_{101/100}=101$, $(1-q-q^2+q^3)^2$, $W_{\rm bal}=4$, and the pair transfer $200/9$ are \certified{}.
+
+\subsection{Palindromic natural-amplitude Wick amplification}
+
+\begin{proposition}[Mirrored unequal-time Wick growth, \proved, \certified]\label{prop:palindromic}
+Even among continuous, palindromic ($u\mapsto\beta-u$), commuting SSH histories with full period matrix $Y=I$ and strictly positive weight, normalized unequal-time Wick contractions grow exponentially as $\Omega\downarrow 0$ at natural amplitude $r=\rho\sqrt{U\Omega}$ and $\beta=a/\Omega$.
+\end{proposition}
+
+\begin{proof}
+Take a single active two-site bond $K=|1\rangle\langle 2|+|2\rangle\langle 1|$ with $b_0=t$ (all other static hoppings canceled) and $h(u)=-v(u)K$, where $v(u)=\eta[f_1(u)-f_2(u)-f_3(u)+f_4(u)]$ using the $C^1$ quarter pulses $f_j$ of Proposition~\ref{prop:unrestricted}. Then $v$ is $C^1$, palindromic, and zero-mean with peak $r=8\eta/\beta$. Because all generators commute, the full period matrix is $I$ with occupation $I/2$, whereas at $u=\beta/4$ the evolution is $\exp(\eta K)$, giving unequal-time contraction
+\begin{equation}\label{eq:mirror-wick}
+ G(\beta/4,0)=\frac{1}{2}\exp(\eta K),\qquad
+ \|G(\beta/4,0)\|=\frac{1}{2}\exp\!\left(\frac{\rho a}{8}\sqrt{\frac{U}{\Omega}}\right).
+\end{equation}
+\end{proof}
+
+At the certified spot $\eta=\log 4$ in \texttt{replay/linear5/replay.py}, $\|G(\beta/4,0)\|=2>1$. Thus Theorem~\ref{thm:slab}'s natural-amplitude slab budget cannot simply be substituted into the pointwise Wick forest of~\cite{linear4}.
+
+\subsection{Failure of instantaneous Fermi-equilibrium tracking}
+
+\begin{proposition}[Adiabatic tracking barrier, \proved, \certified]\label{prop:tracking}
+In the palindromic SSH history of Proposition~\ref{prop:palindromic} with $r=\rho\sqrt{U\Omega}$ and $\beta=a/\Omega$, field increments on the bare electronic window $\delta=1/t$ vanish as $\Omega\downarrow 0$, yet the conditional occupation $n_{\rm hist}(\beta/8)$ differs from the instantaneous Fermi occupation $n_{\rm inst}(\beta/8)=(I+e^{\beta h(\beta/8)})^{-1}$ by
+\begin{equation}\label{eq:tracking}
+ \|n_{\rm hist}(\beta/8)-n_{\rm inst}(\beta/8)\|=\frac{1}{2}\tanh\!\left(\frac{\beta r}{2}\right)\longrightarrow \frac{1}{2}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Because $M=I$ and evolutions commute, $n_{\rm hist}(u)=(I+M)^{-1}M=I/2$ identically. At $u=\beta/8$, $h_{\rm inst}=-rK$ has eigenvalues $\pm r$, so $n_{\rm inst}$ has eigenvalues $(1\pm\tanh(\beta r/2))/2$, giving~\eqref{eq:tracking}. Meanwhile $|v'(u)|\le 4\pi r/\beta$, so on any window $\delta=1/t$, $|\Delta v|\le 4\pi\rho\sqrt{U}\Omega^{3/2}/(at)\to 0$.
+\end{proof}
+
+At the certified value $\beta r=\log 4$ in \texttt{replay/linear5/replay.py}, the tracking error equals $3/10$. Because the annealed static field $b_0=t$ can close the bare band gap, small window increments against fixed $t$ do not justify local thermalization without either retaining imaginary-time memory or proving an annealed gap-exception bound.
+
+\subsection{Failure of ordinary spatial reflection positivity in balanced Holstein sectors}
+
+\begin{proposition}[Canonical Holstein spatial-RP barrier, \proved, \certified]\label{prop:spatial-rp}
+On any reflection-symmetric finite lattice with reflected halves $A$ and $B$, at every finite $\beta,\Omega>0$, every hopping $t$, and every balanced canonical filling $N_\uparrow=N_\downarrow=k$ with $0<k<V$ ($N=2k$), ordinary spatial reflection positivity of the Holstein phonon zero-mode functional fails: with $B_A=\sum_{i\in A}b_{0,i}$ and $B_B=\sum_{i\in B}b_{0,i}$,
+\begin{equation}\label{eq:spatial-rp}
+ \mathbb E\!\bigl[(B_A+UN/2)(B_B+UN/2)\bigr] = -U^2\Var_D(n_A) < 0,
+\end{equation}
+where $\Cov_D(X,Y)=\beta^{-1}\int_0^\beta\langle X(s)Y\rangle\,ds-\langle X\rangle\langle Y\rangle$ is the Duhamel covariance.
+\end{proposition}
+
+\begin{proof}
+Completing the Gaussian square in the free zero-mode density $\exp(-\beta\sum_i b_{0,i}^2/(2U))$ and translating $b_{0,i}\mapsto b_{0,i}+U\tau\xi_i$ yields the exact interacting identity
+\begin{equation}\label{eq:zero-source}
+ \mathbb E\exp\!\left(\sum_i\xi_i b_{0,i}\right)=\exp\!\left(\frac{U\tau}{2}\sum_i\xi_i^2\right)
+ \frac{Z\!\left[H+U\tau\sum_i\xi_i n_i\right]}{Z[H]}.
+\end{equation}
+Differentiating twice at $\xi=0$ gives $\mathbb E b_{0,i}=-U\langle n_i\rangle$ and $\Cov(b_{0,i},b_{0,j})=U\tau\delta_{ij}+U^2\Cov_D(n_i,n_j)$. Because $A$ and $B$ are disjoint, $n_A+n_B=N$ is constant in the fixed-$N$ sector, and $\langle n_A\rangle=\langle n_B\rangle=N/2$ by reflection symmetry, we obtain~\eqref{eq:spatial-rp}. Strict positivity of $\Var_D(n_A)$ follows because the Gibbs density is faithful and $n_A$ is nonconstant on the $(k,k)$ sector. Truncating the local observable $B_A+UN/2$ at large finite amplitude preserves the negative sign in $L^2$.
+\end{proof}
+
+For the certified two-site $t=0, k=1$ check at $\beta U=\log 2$ in \texttt{replay/linear5/replay.py}, $\Var_D(n_A)=e^{\beta U}/(1+e^{\beta U})=2/3$, giving $-2U^2/3<0$. Thus balanced-sector weight positivity does not give ordinary spatial chessboard RP in Holstein; this does not rule out modified reflections, grand-canonical spatial comparisons, or non-RP spatial bounds.
+
+\subsection{Failure of Wick's rule under history averaging}
+
+\begin{proposition}[Non-Gaussianity of averaged fermions, \proved, \certified]\label{prop:wick-avg}
+In the centered spinful Holstein atom ($t=0,\mu=0$) with $H=(U\Omega^2/2)p^2+b^2/(2U)+b(n_\uparrow+n_\downarrow-1)$, at every $\Omega>0$, and also in the normalized annealed static integral at $\Omega=0$, the exact interacting connected occupation cumulant is
+\begin{equation}\label{eq:atom-cumulant}
+ \langle n_\uparrow n_\downarrow\rangle-\langle n_\uparrow\rangle\langle n_\downarrow\rangle=\frac{1}{4}\tanh\!\left(\frac{\beta U}{4}\right)>0,
+\end{equation}
+whereas applying Wick's rule to the averaged one-electron density matrix gives $0$. Moreover, in a free two-orbital $N=1$ spinless canonical state with both one-particle energies equal to zero, $\langle n_1 n_2\rangle-\langle n_1\rangle\langle n_2\rangle=-1/4\ne 0$.
+\end{proposition}
+
+\begin{proof}
+Translating $b$ by $U(n-1)$ gives electronic weights $w_0=w_2=e^{\beta U/2}$ and $w_\uparrow=w_\downarrow=1$, hence $\langle n_\uparrow\rangle=\langle n_\downarrow\rangle=1/2$ and $\langle n_\uparrow n_\downarrow\rangle=e^{\beta U/2}/[2(e^{\beta U/2}+1)]$, yielding~\eqref{eq:atom-cumulant}. By spin conservation, the averaged 1-RDM is $\operatorname{diag}(1/2,1/2)$, whose Wick pairing predicts $1/4-1/4=0$. Equivalently, both spins share the same $b_0$ occupation $f(b_0)$, so averaging the determinant computes $\mathbb E[f(b_0)^2]\ne (\mathbb E f(b_0))^2$. In this zero-energy $N=1$ two-orbital canonical state, $\langle n_1\rangle=\langle n_2\rangle=1/2$ while $n_1 n_2=0$.
+\end{proof}
+
+At $\beta U=4$, \texttt{replay/stage3/replay.py} certifies the cumulant $(e^2-1)/[4(e^2+1)]>0$ (and $-1/4$ for the canonical $N=1$ state). Consequently, although Proposition~\ref{prop:car-det} bounds the averaged two-point determinant by $1$, physical four-point vertices are not determined by the averaged propagator alone and are $O(1)$, not $O(\Omega)$, locally.
+
+\subsection{Negative nonzero-Matsubara SSH slow-field Hessian}
+
+\begin{proposition}[Failure of slow-field uniform convexity below $\Omega^{2/3}$, \proved, \certified]\label{prop:hessian}
+On the $V=16$ square torus at $N_\uparrow=N_\downarrow=4$ (density $1/2$) and fixed $t,U>0$, choose a three-site path $1\text{--}2\text{--}3$, set all static bonds to $b_e=t$ except $b_{12}=t-\delta$ with $\delta=\nu=2\pi\tau$, and take dynamic bond $b_{23}(u)-t=x\cos(\nu u)$. Let $S_{\rm eff}(x)$ be the oscillator action minus the logarithm of the balanced canonical electronic weight. Whenever
+\begin{equation}\label{eq:hessian-region}
+ \tau\le \frac{U}{32}\qquad\text{and}\qquad \tau^3\le \frac{U\Omega^2}{1024},
+\end{equation}
+we have
+\begin{equation}\label{eq:hessian-val}
+ \frac{S_{\rm eff}''(0)}{\beta}=\frac{1+(2\pi\tau/\Omega)^2}{2U}-\frac{\sinh(2\pi)}{2\pi\tau\bigl[3+2\cosh(2\pi)\bigr]} < 0.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Integrating $\cos^2(\nu u)$ and $\sin^2(\nu u)$ in $(2U)^{-1}\int_0^\beta (b^2+\dot b^2/\Omega^2)\,du$ yields $S_{\rm ph}''(0)/\beta$, equal to $[1+(\nu/\Omega)^2]/(2U)$. For one spin at $x=0$, the $16$ orbitals have energies $-\delta,+\delta$, and fourteen zeros; with $q=\beta\delta=2\pi$, the $4$-particle partition weight is
+\[
+ Z_4=\binom{14}{4}+2\binom{14}{3}\cosh q+\binom{14}{2}=\binom{14}{3}(3+2\cosh q),
+\]
+with $\langle n_-\rangle-\langle n_+\rangle=2\sinh q/(3+2\cosh q)$. Because $K_{23}$ couples site $3$ to $|\pm\rangle$ with squared amplitude $1/2$, the canonical Matsubara susceptibility at frequency $\nu$ is
+\[
+ \chi_{23}(i\nu)=\frac{\delta}{\delta^2+\nu^2}(\langle n_-\rangle-\langle n_+\rangle)=\frac{\sinh(2\pi)}{\nu[3+2\cosh(2\pi)]}.
+\]
+Because both spins contribute $\beta\chi_{23}(i\nu)/2$ to $(\log Z_{\rm el})''(0)$, subtracting $\beta\chi_{23}(i\nu)$ gives~\eqref{eq:hessian-val}. Using $e^{2\pi}>4$ implies $4\sinh(2\pi)>3+2\cosh(2\pi)$, so $\chi_{23}(i\nu)>1/(8\pi\tau)$. Meanwhile $\pi<4$ and $\pi^3<32$ give $4\pi\tau+16\pi^3\tau^3/\Omega^2<16\tau+512\tau^3/\Omega^2\le U$ throughout~\eqref{eq:hessian-region}, making the harmonic term strictly smaller than $\chi_{23}(i\nu)$.
+\end{proof}
+
+Every scale $\tau=C\Omega\log^p(1/\Omega)$ ($p\ge 0$) eventually enters~\eqref{eq:hessian-region} as $\Omega\downarrow 0$. Thus integrating out all fermions into a phonon-only action cannot yield a uniformly convex slow-field effective action at the linear or linear-times-polylog scale, even at balanced density $1/2$ and bounded static fields. Retaining low-energy fermions (such as the $\delta=2\pi\tau$ mode) or proving an annealed exception estimate for small-gap configurations remains open. In \texttt{replay/stage3/replay.py}, Machin's rational bounds ($\pi<22/7$, $\pi^3<32$), $e^2>19/3>4$, the canonical binomial factors, and the negative Hessian at $U=1,\tau=1/64,\Omega=1/16$ ($S_{\rm eff}''(0)/\beta=-3.3308489\ldots<0$) are \certified{}.
+
+\subsection{Exponential lower bound on unconditional absolute integrated-field moments}
+
+\begin{proposition}[Absolute-moment majorant barrier, \proved, \certified]\label{prop:abs-moment}
+In the exact dynamic law of the isolated Holstein atom (or any free projected harmonic coordinate $v=b-b_0$), for every $c>0$,
+\begin{equation}\label{eq:abs-atom}
+ \log\mathbb E\exp\!\left(c\int_0^\beta |v(u)|\,du\right)
+ \ge \frac{c^2 U\beta}{4\bigl[1+(2\pi/(\beta\Omega))^2\bigr]},
+\end{equation}
+which exceeds $c^2 U/(164\Omega)$ at $\beta\Omega=1$ and $c^2 U\Omega^2/(320\tau^3)$ for $\beta\Omega\le 2\pi$. Moreover, on any $V$-site square lattice at any $t>0$ and balanced filling $N_\uparrow=N_\downarrow=k$, the uniform coordinate $q=V^{-1/2}\sum_i b_i$ couples only to $N=2k$, so its dynamic mode $v_q$ stays an independent free projected Gaussian and forces
+\begin{equation}\label{eq:abs-lattice}
+ \mathbb E\exp\!\left(c\int_0^\beta |v_i(u)|\,du\right)
+ \ge \exp\!\left(\frac{c^2\Var(L_q)}{2V}\right),\qquad L_q=\int_0^\beta\cos\!\left(\frac{2\pi u}{\beta}\right)v_q(u)\,du.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Since $\int_0^\beta |v(u)|\,du \ge L=\int_0^\beta\cos(\nu_1 u)v(u)\,du$ ($\nu_1=2\pi/\beta$) and $L$ is centered Gaussian with variance $\Var(L)=2D_1(\beta/2)^2=\beta U\Omega^2/[2(\Omega^2+\nu_1^2)]$, evaluating $\mathbb E\exp(cL)=\exp(c^2\Var(L)/2)$ yields~\eqref{eq:abs-atom}. The two explicit constants use $\pi^2<10$ and $32\pi^2<320$ (\certified{} in \nolinkurl{replay/stage3/replay.py}). For the $V$-site lattice, writing $L_i=L_q/\sqrt{V}+L_{i,\rm rest}$ and using $\mathbb E L_{i,\rm rest}=0$ by time-translation invariance gives~\eqref{eq:abs-lattice} by independence and Jensen's inequality.
+\end{proof}
+
+At $\tau=C\Omega[\log(1/\Omega)]^p$,~\eqref{eq:abs-atom} diverges as $\Omega^{-1}[\log(1/\Omega)]^{-3p}$, and~\eqref{eq:abs-lattice} prevents any $\Omega$-uniform polynomial bound simultaneously across finite squares if an expansion pays the unconditional absolute moment $\mathbb E\exp(c\int|v|)$ as its activity majorant. This does not contradict Proposition~\ref{prop:car-det} or rule out cancellations before absolute values are taken.
+
+\subsection{Unbounded charged insertions inside good natural-amplitude slabs}
+
+\begin{proposition}[Good-block temporal gluing barrier, \proved, \certified]\label{prop:gluing}
+On a fixed finite square SSH torus with $V$ sites, in a balanced sector $N_\uparrow=N_\downarrow=k$ satisfying $0<k<V$, and with all static hoppings canceled ($b_e=t$) and one active bond $1\text{--}2$ driven by $h(u)=-r\sin(2\pi u/\beta)K_{12}$ at $\beta=a/\Omega$ and $r=\rho\sqrt{U\Omega}$ ($\rho^2\ge 128a$), the full period matrix is $I$, every subinterval excursion is at most $2r$ (lying inside the certified slab budget $x\ge 16$ of Theorem~\ref{thm:slab}), the grand-canonical and $k$-particle balanced weights are constant ($4^V$ and $\binom{V}{k}^2$), and every instantaneous frozen Hamiltonian satisfies Proposition~\ref{prop:ct}, yet the balanced two-time onsite charged pair insertion between $0$ and $\beta/2$ equals
+\begin{equation}\label{eq:gluing}
+ \left(1-\frac{k}{V}\right)^2\sinh^2(\eta),\qquad \eta=\frac{r\beta}{\pi}=\frac{\rho a}{\pi}\sqrt{\frac{U}{\Omega}},
+\end{equation}
+growing faster than any polynomial in $1/\Omega$.
+\end{proposition}
+
+\begin{proof}
+Because $h(u)$ commutes at all times and integrates to zero over $[0,\beta]$, the full period matrix is $M=I$. On $[0,\beta/2]$, $\int_0^{\beta/2}r\sin(2\pi u/\beta)\,du=r\beta/\pi=\eta$, so the half-period evolution is $\exp(\eta K_{12})$. In the $k$-particle one-spin sector, $M=I$ gives the normalized identity state with vacancy matrix $(1-k/V)I$; conjugating an annihilation operator at site $1$ by $\exp(\eta K_{12})$ produces a site-$2$ contraction $(1-k/V)\sinh(\eta)$. Multiplying the two spin traces yields~\eqref{eq:gluing} (and $\sinh^2(\eta)/4$ grand canonically). Across $[0,\beta]$, the oscillation excursion from $u=0$ is $r$ (and $\le 2r$ on any subinterval), so $x=(2r)^2/(32D\beta)=\rho^2/(8a)\ge 16$ when $\rho^2\ge 128a$.
+\end{proof}
+
+At the certified spot $V=16,k=4,\eta=4$ in \texttt{replay/stage3/replay.py}, $(9/16)\sinh^2(4)>100$ while $16^2/8=32\ge 16$. Proposition~\ref{prop:gluing} shows that replacing a desired annealed bound by a pointwise good-amplitude bound with a polynomial prefactor is false, even when instantaneous resolvents obey~\eqref{eq:ct}. It does not refute an equal-time spatial clustering bound or an annealed estimate that integrates the coupled field weight before taking absolute values.
+
+\section{Atomic Franck--Condon sidebands and the remaining gap}
+
+We close by checking an alternative physical intuition, polaronic tunnelling suppression, and stating the exact open targets.
+
+\begin{proposition}[Exact atomic low-sideband spectral weight, \proved, \certified]\label{prop:fc}
+In the centered Holstein atom of Proposition~\ref{prop:wick-avg}, the oscillator ground states in occupancies $n=0$ and $n=2$ are Gaussians $\varphi_{\pm U}(b)=(\pi U\Omega)^{-1/4}\exp[-(b\mp U)^2/(2U\Omega)]$, giving pair ground-to-ground overlap $|\langle 0,\varphi_{+U}|c_\downarrow c_\uparrow|2,\varphi_{-U}\rangle|=e^{-U/\Omega}$ and Poisson sideband weights
+\begin{equation}\label{eq:poisson}
+ w_m=e^{-\Lambda}\frac{\Lambda^m}{m!},\qquad \Lambda=\frac{2U}{\Omega},\qquad \sum_{m=0}^\infty w_m=1.
+\end{equation}
+Consequently, the zero-temperature atomic pair spectral weight up to excitation energy $A\Omega$ is $e^{-2U/\Omega}\sum_{m=0}^{\lfloor A\rfloor}(2U/\Omega)^m/m!$, exponentially small as $\Omega\downarrow 0$ at fixed $A,U>0$.
+\end{proposition}
+
+\begin{proof}
+Completing the square in $\int \varphi_{+U}(b)\varphi_{-U}(b)\,db$ gives $\exp[-4U^2/(4U\Omega)]=\exp(-U/\Omega)$ for the matrix element and $\exp(-2U/\Omega)$ for its squared spectral weight. Equivalently, translating the Gaussian ground state by $2U$ applies the coherent displacement operator $\exp[\sqrt{\Lambda}(a^\dagger-a)]$ ($\Lambda=2U/\Omega$), whose vacuum-to-$m$ matrix element has squared modulus~\eqref{eq:poisson}.
+\end{proof}
+
+At $U/\Omega=8$ and $m\le 2$, \texttt{replay/stage3/replay.py} certifies $145e^{-16}<10^{-4}$ (and distinguishes the amplitude exponent $-U/\Omega=-8$ from the spectral-weight exponent $-2U/\Omega=-16$). Crucially,~\eqref{eq:poisson} is a zero-temperature $t=0$ atomic spectral statement: its dominant sidebands carry energy of order $U$ rather than $\Omega$, and it does not bound fixed-$t$ lattice kinetic energy or finite-temperature stiffness at regular density.
+
+\subsection*{What remains open}
+
+Proving or refuting a linear-scale ceiling $k_BT_{\rm pair}\le C\Omega$ (or $\Omega\log^p(1/\Omega)$) at fixed $t,U>0$ and fixed regular density $n\in(0,2)$ requires resolving three concrete mathematical gaps:
+\begin{enumerate}
+\item \textbf{Charged annealed block transport.} Integrate temporally open charged insertions under the exact coupled weight, retaining low-energy electronic boundary data and imaginary-time memory, to obtain a summable spatial/attachment estimate at $\tau=C\Omega$ or $\Omega\log^p(1/\Omega)$. Theorem~\ref{thm:slab} controls source-free excursions, Proposition~\ref{prop:abs-moment} rules out paying unconditional integrated-field absolute moments, and Proposition~\ref{prop:gluing} rules out pointwise good-set charged gluing.
+\item \textbf{Fixed-density pair conclusion.} Transfer a completed spatial/sourced bound to every fixed-total-density thermodynamic state; zero-source free-energy equality (Proposition~\ref{prop:sandwich}) alone does not transfer pair-source curvatures or correlations.
+\item \textbf{Alternative polaron-tunnelling theorem.} If instead pursuing stronger-than-linear coherence suppression in a self-trapped regime, establish separated adiabatic barriers, control all soft-phonon virtual paths at fixed $t$ and regular density, and connect them to finite-temperature stiffness or spatial pair order; Proposition~\ref{prop:fc} does not supply this.
+\end{enumerate}
+
+\section*{Data availability and certification scope}
+
+No empirical or simulation data were used. The accompanying offline replay snapshots in \nolinkurl{replay/linear5/replay.py} ($24$ mutant guards) and \nolinkurl{replay/stage3/replay.py} ($12$ mutant guards) verify the exact rational algebra and multi-precision interval spot checks described in the text. Neither finite replay formalizes the unbounded semigroup approximation, continuous-time dyadic chaining, $\mathrm{SU}(2)$ representation decomposition, Lehmann Hilbert-space limit, or any lattice pairing ceiling. Within the underlying analytical notes, all proved propositions and Theorem~\ref{thm:slab} derive from arguments that have passed independent first-principles review, and the typeset manuscript was reviewed separately against those notes. This preprint has not been peer reviewed.
+\ifstaged{\LINEARFIVEDOI}{\par\noindent Article DOI: \expandafter\DOI\expandafter{\LINEARFIVEDOI}}{}
+\ifstaged{\LINEARFIVESUPPDOI}{\par\noindent Supplement DOI: \expandafter\DOI\expandafter{\LINEARFIVESUPPDOI}}{}
+\ifstaged{\LINEARFIVEREPO}{\par\noindent Repository: \expandafter\url\expandafter{\LINEARFIVEREPO}}{}
+
+\section*{AI assistance}
+
+AI agents generated proofs, certificates, code, and manuscript drafts and edits under D.\ Rens' direction and review. The independent reviews mentioned above were carried out by separate AI agents working from the notes and replays.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+\end{document}
